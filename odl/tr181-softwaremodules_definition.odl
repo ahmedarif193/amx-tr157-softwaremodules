@@ -62,8 +62,8 @@
              * If the referenced object is deleted, the corresponding item MUST be removed from the list. See [Section 4.2.1/TR-181i2].
              * @version V1.0
              */
-            %persistent string LowerLayers {
-                 on action validate call check_maximum_length 1024;
+            %persistent string Type {
+                 on action validate call check_maximum_length 64;
             }
         }
     }

@@ -1,3 +1,3 @@
-# tr181-logical
+# tr181-softwaremodules
 
-tr181 based logical interface manager
+tr181 based softwaremodules manager

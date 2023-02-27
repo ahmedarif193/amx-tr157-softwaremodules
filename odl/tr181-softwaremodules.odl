@@ -61,7 +61,7 @@
 ****************************************************************************/
 
 %config {
-    name = "tr181-logical";
+    name = "tr181-softwaremodules";
     storage-type = "odl";
     storage-path = "${rw_data_path}/${name}";
 
@@ -82,13 +82,13 @@
     };
 
     trace-zones = {
-        "logical" = 200
+        "softwaremodules" = 200
     };
 
-    NetModel = "logical_intfs";
-    logical_intfs = {
+    NetModel = "softwaremodules_execenv";
+    softwaremodules_execenv = {
         InstancePath = "Logical.Interface.",
-        Tags = "logical",
+        Tags = "softwaremodules",
         Prefix = ""
     };
 }
@@ -103,5 +103,5 @@ include "${name}_definition.odl";
 
 %define {
     entry-point mod_nm.mod_netmodel_main;
-    entry-point tr181-logical.tr181_logical_main;
+    entry-point tr181-softwaremodules.tr181_softwaremodules_main;
 }
