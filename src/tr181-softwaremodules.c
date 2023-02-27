@@ -59,42 +59,56 @@
 ** POSSIBILITY OF SUCH DAMAGE.
 **
 ****************************************************************************/
-#if !defined(__TR181_LOGICAL_PRIV_H__)
-#define __TR181_LOGICAL_PRIV_H__
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+#include <debug/sahtrace.h>
 
-#include <stdio.h>
+#include "tr181-softwaremodules_priv.h"
 
-#include <amxc/amxc_macros.h>
-#include <amxc/amxc.h>
-#include <amxp/amxp.h>
+#define ME "softwaremodules"
 
-#include <amxd/amxd_dm.h>
-#include <amxd/amxd_types.h>
-#include <amxo/amxo.h>
+typedef struct _softwaremodules {
+    amxd_dm_t* dm;
+    amxo_parser_t* parser;
+} softwaremodules_t;
 
-int _tr181_logical_main(int reason, amxd_dm_t* dm, amxo_parser_t* parser);
+static softwaremodules_t softwaremodules;
 
-amxd_dm_t* logical_get_dm(void);
-amxo_parser_t* logical_get_parser(void);
-amxc_var_t* logical_get_config(void);
-
-void _logical_interface_enabled(const char* const sig_name,
-                                const amxc_var_t* const data,
-                                void* const priv);
-
-void _logical_interface_disabled(const char* const sig_name,
-                                 const amxc_var_t* const data,
-                                 void* const priv);
-
-void _logical_interface_added(const char* const sig_name,
-                              const amxc_var_t* const data,
-                              void* const priv);
-#ifdef __cplusplus
+static int softwaremodules_init(amxd_dm_t* dm, amxo_parser_t* parser) {
+    softwaremodules.dm = dm;
+    softwaremodules.parser = parser;
+    return 0;
 }
-#endif
 
-#endif // __TR181_LOGICAL_PRIV_H__
+static int softwaremodules_cleanup(UNUSED amxd_dm_t* dm, UNUSED amxo_parser_t* parser) {
+    softwaremodules.dm = NULL;
+    softwaremodules.parser = NULL;
+    return 0;
+}
+
+amxd_dm_t* softwaremodules_get_dm(void) {
+    return softwaremodules.dm;
+}
+
+amxo_parser_t* softwaremodules_get_parser(void) {
+    return softwaremodules.parser;
+}
+
+amxc_var_t* softwaremodules_get_config(void) {
+    return &(softwaremodules.parser->config);
+}
+
+int _tr181_softwaremodules_main(int reason, amxd_dm_t* dm, amxo_parser_t* parser) {
+    int retval = 0;
+    switch(reason) {
+    case AMXO_START:
+        retval = softwaremodules_init(dm, parser);
+        break;
+
+    case AMXO_STOP:
+        retval = softwaremodules_cleanup(dm, parser);
+        break;
+    }
+
+    return retval;
+}
+

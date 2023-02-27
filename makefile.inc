@@ -28,7 +28,7 @@ CC_PARTS = $(subst -, ,$(CC))
 CC_NAME = $(word $(words $(CC_PARTS)),$(CC_PARTS))
 
 # Target
-COMPONENT = tr181-logical
+COMPONENT = tr181-softwaremodules
 
 # install directories
 PREFIX ?= /usr/
@@ -37,8 +37,8 @@ BINDIR ?= $(PREFIX)bin
 INCLUDEDIR ?= $(PREFIX)include
 INITDIR ?= /etc/init.d
 ACLDIR ?= /etc/acl
-DOCDIR ?= $(PREFIX)share/doc/tr181-logical
+DOCDIR ?= $(PREFIX)share/doc/tr181-softwaremodules
 PROCMONDIR ?= $(PREFIX)lib/processmonitor/scripts
 
 # default config options
-CONFIG_SAH_AMX_TR181_LOGICAL_ORDER ?= 21
+CONFIG_SAH_AMX_TR181_SOFTWAREMODULES_ORDER ?= 21

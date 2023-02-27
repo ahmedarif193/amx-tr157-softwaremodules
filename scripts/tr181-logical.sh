@@ -1,7 +1,7 @@
 #!/bin/sh
 [ -f /etc/environment ] && source /etc/environment
 ulimit -c ${ULIMIT_CONFIGURATION:0}
-name="tr181-logical"
+name="tr181-softwaremodules"
 
 case $1 in
     start|boot)
@@ -15,7 +15,7 @@ case $1 in
 	fi
         ;;
     debuginfo)
-        ubus-cli "Logical.?"
+        ubus-cli "SoftwareModules.?"
         ;;
     restart)
         $0 stop

@@ -87,7 +87,7 @@
 
     NetModel = "softwaremodules_execenv";
     softwaremodules_execenv = {
-        InstancePath = "Logical.Interface.",
+        InstancePath = "softwaremodules.ExecEnv.",
         Tags = "softwaremodules",
         Prefix = ""
     };
