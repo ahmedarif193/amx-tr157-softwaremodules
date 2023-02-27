@@ -28,16 +28,12 @@
             /**
              * The current operational state of the interface (see [Section 4.2.2/TR-181i2]). Enumeration of:
              * Up
-             * Down
-             * Unknown
-             * Dormant
-             * NotPresent
-             * LowerLayerDown
-             * Error (OPTIONAL)
+             * Error
+             * Disabled
              * @version V1.0
              */
-            %read-only string Status = "Down" {
-                on action validate call check_enum ["Up", "Down", "Unknown", "Dormant", "NotPresent", "LowerLayerDown", "Error"];
+            %read-only string Status = "Disabled" {
+                on action validate call check_enum ["Up", "Error", "Disabled"];
             }
 
             /**

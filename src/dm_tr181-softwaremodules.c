@@ -96,6 +96,7 @@ static void softwaremodules_execenv_status(amxd_object_t* obj, bool enable) {
 void _softwaremodules_execenv_enabled(UNUSED const char* const sig_name,
                                 const amxc_var_t* const data,
                                 UNUSED void* const priv) {
+    SAH_TRACE_WARNING("softwaremodules _softwaremodules_execenv_enabled");
     amxd_dm_t* dm = softwaremodules_get_dm();
     amxd_object_t* obj = amxd_dm_signal_get_object(dm, data);
     softwaremodules_execenv_status(obj, true);
@@ -104,6 +105,7 @@ void _softwaremodules_execenv_enabled(UNUSED const char* const sig_name,
 void _softwaremodules_execenv_disabled(UNUSED const char* const sig_name,
                                  const amxc_var_t* const data,
                                  UNUSED void* const priv) {
+    SAH_TRACE_WARNING("softwaremodules _softwaremodules_execenv_disabled");
     amxd_dm_t* dm = softwaremodules_get_dm();
     amxd_object_t* obj = amxd_dm_signal_get_object(dm, data);
     softwaremodules_execenv_status(obj, false);
@@ -115,5 +117,6 @@ void _softwaremodules_execenv_added(UNUSED const char* const sig_name,
     amxd_dm_t* dm = softwaremodules_get_dm();
     amxd_object_t* obj = amxd_dm_signal_get_object(dm, data);
     amxd_object_t* inst = amxd_object_get_instance(obj, NULL, GET_UINT32(data, "index"));
+    SAH_TRACE_WARNING("softwaremodules _softwaremodules_execenv_added");
     softwaremodules_execenv_status(inst, amxd_object_get_value(bool, inst, "Enable", NULL));
 }
