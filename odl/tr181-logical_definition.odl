@@ -1,0 +1,81 @@
+%define {
+
+    /**
+     * Logical object. This object models several Logical interface objects, each representing a different stack layer, including: Interface. Interface is a logical interface which can point to other stackable interface layers.
+     * @version V1.0
+     */
+    %persistent object SoftwareModules {
+
+        /**
+         * Logical interface table (a stackable interface object as described in [Section 4.2/TR-181i2]). This table models only logical interfaces.
+         * At most one entry in this table can exist with a given value for Alias, or with a given value for Name. The non-functional key parameters Alias and Name are immutable and therefore MUST NOT change once they've been assigned.
+         * @version V1.0
+         */
+        %persistent object ExeEnv[] {
+
+            /**
+             * The number of entries in the Interface table.
+             * @version V1.0
+             */
+            counted with ExeEnvNumberOfEntries;
+
+            /**
+             * Enables or disables the interface.
+             * @version V1.0
+             */
+            %persistent bool Enable;
+
+            /**
+             * The current operational state of the interface (see [Section 4.2.2/TR-181i2]). Enumeration of:
+             * Up
+             * Down
+             * Unknown
+             * Dormant
+             * NotPresent
+             * LowerLayerDown
+             * Error (OPTIONAL)
+             * @version V1.0
+             */
+            %read-only string Status = "Down" {
+                on action validate call check_enum ["Up", "Down", "Unknown", "Dormant", "NotPresent", "LowerLayerDown", "Error"];
+            }
+
+            /**
+             * A non-volatile unique key used to reference this instance.
+             * Alias provides a mechanism for a Controller to label this instance for future reference.
+             * @version V1.0
+             */
+            %unique %key %persistent string Alias {
+                on action validate call check_maximum_length 64;
+            }
+
+            /**
+             * The textual name of the interface as assigned by the CPE.
+             * @version V1.0
+             */
+            %read-only string Name{
+                on action validate call check_maximum_length 64;
+            }
+
+            /**
+             * Comma-separated list (maximum number of characters 1024) of strings. Each list item MUST be the Path Name of an interface object that is stacked immediately below this interface object.
+             * If the referenced object is deleted, the corresponding item MUST be removed from the list. See [Section 4.2.1/TR-181i2].
+             * @version V1.0
+             */
+            %persistent string LowerLayers {
+                 on action validate call check_maximum_length 1024;
+            }
+        }
+    }
+}
+
+%populate {
+   on event "dm:object-changed" call logical_interface_enabled
+        filter 'path matches "Logical.Interface.[0-9]+\.$" && parameters.Enable.to == true';
+
+    on event "dm:object-changed" call logical_interface_disabled
+        filter 'path matches "Logical.Interface.[0-9]+\.$" && parameters.Enable.to == false';
+
+    on event "dm:instance-added" call logical_interface_added
+        filter 'path == "Logical.Interface."';
+}
