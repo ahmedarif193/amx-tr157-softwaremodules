@@ -1,20 +1,20 @@
 %define {
 
     /**
-     * Logical object. This object models several Logical interface objects, each representing a different stack layer, including: Interface. Interface is a logical interface which can point to other stackable interface layers.
+     * SoftwareModules object. This object models several SoftwareModules interface objects, each representing a different stack layer, including: ExecEnv. ExecEnv is a SoftwareModules interface which can point to other stackable interface layers.
      * @version V1.0
      */
     %persistent object SoftwareModules {
 
         /**
-         * Logical interface table (a stackable interface object as described in [Section 4.2/TR-181i2]). This table models only logical interfaces.
+         * SoftwareModules interface table (a stackable interface object as described in [Section 4.2/TR-181i2]). This table models only SoftwareModules interfaces.
          * At most one entry in this table can exist with a given value for Alias, or with a given value for Name. The non-functional key parameters Alias and Name are immutable and therefore MUST NOT change once they've been assigned.
          * @version V1.0
          */
         %persistent object ExeEnv[] {
 
             /**
-             * The number of entries in the Interface table.
+             * The number of entries in the ExecEnv table.
              * @version V1.0
              */
             counted with ExeEnvNumberOfEntries;
@@ -70,12 +70,12 @@
 }
 
 %populate {
-   on event "dm:object-changed" call logical_interface_enabled
-        filter 'path matches "Logical.Interface.[0-9]+\.$" && parameters.Enable.to == true';
+   on event "dm:object-changed" call softwaremodules_execenv_enabled
+        filter 'path matches "SoftwareModules.ExecEnv.[0-9]+\.$" && parameters.Enable.to == true';
 
-    on event "dm:object-changed" call logical_interface_disabled
-        filter 'path matches "Logical.Interface.[0-9]+\.$" && parameters.Enable.to == false';
+    on event "dm:object-changed" call softwaremodules_execenv_disabled
+        filter 'path matches "SoftwareModules.ExecEnv.[0-9]+\.$" && parameters.Enable.to == false';
 
-    on event "dm:instance-added" call logical_interface_added
-        filter 'path == "Logical.Interface."';
+    on event "dm:instance-added" call softwaremodules_execenv_added
+        filter 'path == "SoftwareModules.ExecEnv."';
 }

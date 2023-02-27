@@ -59,61 +59,42 @@
 ** POSSIBILITY OF SUCH DAMAGE.
 **
 ****************************************************************************/
-#include <stdlib.h>
+#if !defined(__TR181_softwaremodules_PRIV_H__)
+#define __TR181_softwaremodules_PRIV_H__
 
-#include <debug/sahtrace.h>
+#ifdef __cplusplus
+extern "C" {
+#endif
 
+#include <stdio.h>
+
+#include <amxc/amxc_macros.h>
 #include <amxc/amxc.h>
 #include <amxp/amxp.h>
+
 #include <amxd/amxd_dm.h>
-#include <amxd/amxd_object.h>
-#include <amxd/amxd_object_event.h>
-#include <amxd/amxd_action.h>
-#include <amxd/amxd_transaction.h>
+#include <amxd/amxd_types.h>
+#include <amxo/amxo.h>
 
-#include "tr181-softwaremodules_priv.h"
+int _tr181_softwaremodules_main(int reason, amxd_dm_t* dm, amxo_parser_t* parser);
 
-static void softwaremodules_execenv_status(amxd_object_t* obj, bool enable) {
-    amxd_trans_t transaction;
-    const char* alias = NULL;
-    amxd_dm_t* dm = softwaremodules_get_dm();
-    amxd_trans_init(&transaction);
-    amxd_trans_set_attr(&transaction, amxd_tattr_change_ro, true);
+amxd_dm_t* softwaremodules_get_dm(void);
+amxo_parser_t* softwaremodules_get_parser(void);
+amxc_var_t* softwaremodules_get_config(void);
 
-    alias = amxc_var_constcast(cstring_t, amxd_object_get_param_value(obj, "Alias"));
-    amxd_trans_select_object(&transaction, obj);
-    if(enable) {
-        amxd_trans_set_value(cstring_t, &transaction, "Status", "Up");
-        SAH_TRACE_WARNING("softwaremodules Interface[%s] change Status(Up)", alias);
-    } else {
-        amxd_trans_set_value(cstring_t, &transaction, "Status", "Down");
-        SAH_TRACE_WARNING("softwaremodules Interface[%s] change Status(Down)", alias);
-    }
-    amxd_trans_apply(&transaction, dm);
-    amxd_trans_clean(&transaction);
-}
-
-void _softwaremodules_execenv_enabled(UNUSED const char* const sig_name,
+void _softwaremodules_execenv_enabled(const char* const sig_name,
                                 const amxc_var_t* const data,
-                                UNUSED void* const priv) {
-    amxd_dm_t* dm = softwaremodules_get_dm();
-    amxd_object_t* obj = amxd_dm_signal_get_object(dm, data);
-    softwaremodules_execenv_status(obj, true);
-}
+                                void* const priv);
 
-void _softwaremodules_execenv_disabled(UNUSED const char* const sig_name,
+void _softwaremodules_execenv_disabled(const char* const sig_name,
                                  const amxc_var_t* const data,
-                                 UNUSED void* const priv) {
-    amxd_dm_t* dm = softwaremodules_get_dm();
-    amxd_object_t* obj = amxd_dm_signal_get_object(dm, data);
-    softwaremodules_execenv_status(obj, false);
-}
+                                 void* const priv);
 
-void _softwaremodules_execenv_added(UNUSED const char* const sig_name,
+void _softwaremodules_execenv_added(const char* const sig_name,
                               const amxc_var_t* const data,
-                              UNUSED void* const priv) {
-    amxd_dm_t* dm = softwaremodules_get_dm();
-    amxd_object_t* obj = amxd_dm_signal_get_object(dm, data);
-    amxd_object_t* inst = amxd_object_get_instance(obj, NULL, GET_UINT32(data, "index"));
-    softwaremodules_execenv_status(inst, amxd_object_get_value(bool, inst, "Enable", NULL));
+                              void* const priv);
+#ifdef __cplusplus
 }
+#endif
+
+#endif // __TR181_softwaremodules_PRIV_H__
