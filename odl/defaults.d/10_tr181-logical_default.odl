@@ -1,0 +1,9 @@
+%populate {
+    object SoftwareModules.ExecEnv {
+        instance add (Alias = "CPE-1") {
+            parameter 'Enable' = true;
+            parameter 'Name' = "default-container-1";
+            parameter 'Type' = "busybox";
+        }
+    }
+}
