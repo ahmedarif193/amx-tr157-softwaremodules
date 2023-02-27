@@ -59,42 +59,49 @@
 ** POSSIBILITY OF SUCH DAMAGE.
 **
 ****************************************************************************/
-#if !defined(__TR181_softwaremodules_PRIV_H__)
-#define __TR181_softwaremodules_PRIV_H__
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+%config {
+    name = "tr157-softwaremodules";
+    storage-type = "odl";
+    storage-path = "${rw_data_path}/${name}";
 
-#include <stdio.h>
+    import-dbg = true;
+    odl = {
+        load-dm-events = true,
+        dm-load = true,
+        dm-save = true,
+        dm-save-on-changed = true,
+        dm-save-delay = 1000,
+        dm-defaults = "defaults.d/",
+        directory = "${storage-path}/odl"
+    };
 
-#include <amxc/amxc_macros.h>
-#include <amxc/amxc.h>
-#include <amxp/amxp.h>
+    sahtrace = {
+        type = "syslog",
+        level = 200
+    };
 
-#include <amxd/amxd_dm.h>
-#include <amxd/amxd_types.h>
-#include <amxo/amxo.h>
+    trace-zones = {
+        "softwaremodules" = 200
+    };
 
-int _tr181_softwaremodules_main(int reason, amxd_dm_t* dm, amxo_parser_t* parser);
-
-amxd_dm_t* softwaremodules_get_dm(void);
-amxo_parser_t* softwaremodules_get_parser(void);
-amxc_var_t* softwaremodules_get_config(void);
-
-void _softwaremodules_execenv_enabled(const char* const sig_name,
-                                const amxc_var_t* const data,
-                                void* const priv);
-
-void _softwaremodules_execenv_disabled(const char* const sig_name,
-                                 const amxc_var_t* const data,
-                                 void* const priv);
-
-void _softwaremodules_execenv_added(const char* const sig_name,
-                              const amxc_var_t* const data,
-                              void* const priv);
-#ifdef __cplusplus
+    NetModel = "softwaremodules_execenv";
+    softwaremodules_execenv = {
+        InstancePath = "softwaremodules.ExecEnv.",
+        Tags = "softwaremodules",
+        Prefix = ""
+    };
 }
-#endif
 
-#endif // __TR181_softwaremodules_PRIV_H__
+import "${name}.so" as "${name}";
+import "mod-dmstats.so";
+import "mod-dmext.so";
+import "mod-netmodel.so" as "mod_nm";
+#include "mod_sahtrace.odl";
+
+include "${name}_definition.odl";
+
+%define {
+    entry-point mod_nm.mod_netmodel_main;
+    entry-point tr157-softwaremodules.tr157_softwaremodules_main;
+}

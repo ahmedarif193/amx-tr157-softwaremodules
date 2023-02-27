@@ -59,64 +59,56 @@
 ** POSSIBILITY OF SUCH DAMAGE.
 **
 ****************************************************************************/
-#include <stdlib.h>
 
 #include <debug/sahtrace.h>
 
-#include <amxc/amxc.h>
-#include <amxp/amxp.h>
-#include <amxd/amxd_dm.h>
-#include <amxd/amxd_object.h>
-#include <amxd/amxd_object_event.h>
-#include <amxd/amxd_action.h>
-#include <amxd/amxd_transaction.h>
+#include "tr157-softwaremodules_priv.h"
 
-#include "tr181-softwaremodules_priv.h"
+#define ME "softwaremodules"
 
-static void softwaremodules_execenv_status(amxd_object_t* obj, bool enable) {
-    amxd_trans_t transaction;
-    const char* alias = NULL;
-    amxd_dm_t* dm = softwaremodules_get_dm();
-    amxd_trans_init(&transaction);
-    amxd_trans_set_attr(&transaction, amxd_tattr_change_ro, true);
+typedef struct _softwaremodules {
+    amxd_dm_t* dm;
+    amxo_parser_t* parser;
+} softwaremodules_t;
 
-    alias = amxc_var_constcast(cstring_t, amxd_object_get_param_value(obj, "Alias"));
-    amxd_trans_select_object(&transaction, obj);
-    if(enable) {
-        amxd_trans_set_value(cstring_t, &transaction, "Status", "Up");
-        SAH_TRACE_WARNING("softwaremodules Interface[%s] change Status(Up)", alias);
-    } else {
-        amxd_trans_set_value(cstring_t, &transaction, "Status", "Down");
-        SAH_TRACE_WARNING("softwaremodules Interface[%s] change Status(Down)", alias);
+static softwaremodules_t softwaremodules;
+
+static int softwaremodules_init(amxd_dm_t* dm, amxo_parser_t* parser) {
+    softwaremodules.dm = dm;
+    softwaremodules.parser = parser;
+    return 0;
+}
+
+static int softwaremodules_cleanup(UNUSED amxd_dm_t* dm, UNUSED amxo_parser_t* parser) {
+    softwaremodules.dm = NULL;
+    softwaremodules.parser = NULL;
+    return 0;
+}
+
+amxd_dm_t* softwaremodules_get_dm(void) {
+    return softwaremodules.dm;
+}
+
+amxo_parser_t* softwaremodules_get_parser(void) {
+    return softwaremodules.parser;
+}
+
+amxc_var_t* softwaremodules_get_config(void) {
+    return &(softwaremodules.parser->config);
+}
+
+int _tr157_softwaremodules_main(int reason, amxd_dm_t* dm, amxo_parser_t* parser) {
+    int retval = 0;
+    switch(reason) {
+    case AMXO_START:
+        retval = softwaremodules_init(dm, parser);
+        break;
+
+    case AMXO_STOP:
+        retval = softwaremodules_cleanup(dm, parser);
+        break;
     }
-    amxd_trans_apply(&transaction, dm);
-    amxd_trans_clean(&transaction);
+
+    return retval;
 }
 
-void _softwaremodules_execenv_enabled(UNUSED const char* const sig_name,
-                                const amxc_var_t* const data,
-                                UNUSED void* const priv) {
-    SAH_TRACE_WARNING("softwaremodules _softwaremodules_execenv_enabled");
-    amxd_dm_t* dm = softwaremodules_get_dm();
-    amxd_object_t* obj = amxd_dm_signal_get_object(dm, data);
-    softwaremodules_execenv_status(obj, true);
-}
-
-void _softwaremodules_execenv_disabled(UNUSED const char* const sig_name,
-                                 const amxc_var_t* const data,
-                                 UNUSED void* const priv) {
-    SAH_TRACE_WARNING("softwaremodules _softwaremodules_execenv_disabled");
-    amxd_dm_t* dm = softwaremodules_get_dm();
-    amxd_object_t* obj = amxd_dm_signal_get_object(dm, data);
-    softwaremodules_execenv_status(obj, false);
-}
-
-void _softwaremodules_execenv_added(UNUSED const char* const sig_name,
-                              const amxc_var_t* const data,
-                              UNUSED void* const priv) {
-    amxd_dm_t* dm = softwaremodules_get_dm();
-    amxd_object_t* obj = amxd_dm_signal_get_object(dm, data);
-    amxd_object_t* inst = amxd_object_get_instance(obj, NULL, GET_UINT32(data, "index"));
-    SAH_TRACE_WARNING("softwaremodules _softwaremodules_execenv_added");
-    softwaremodules_execenv_status(inst, amxd_object_get_value(bool, inst, "Enable", NULL));
-}

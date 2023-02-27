@@ -59,49 +59,64 @@
 ** POSSIBILITY OF SUCH DAMAGE.
 **
 ****************************************************************************/
+#include <stdlib.h>
 
-%config {
-    name = "tr181-softwaremodules";
-    storage-type = "odl";
-    storage-path = "${rw_data_path}/${name}";
+#include <debug/sahtrace.h>
 
-    import-dbg = true;
-    odl = {
-        load-dm-events = true,
-        dm-load = true,
-        dm-save = true,
-        dm-save-on-changed = true,
-        dm-save-delay = 1000,
-        dm-defaults = "defaults.d/",
-        directory = "${storage-path}/odl"
-    };
+#include <amxc/amxc.h>
+#include <amxp/amxp.h>
+#include <amxd/amxd_dm.h>
+#include <amxd/amxd_object.h>
+#include <amxd/amxd_object_event.h>
+#include <amxd/amxd_action.h>
+#include <amxd/amxd_transaction.h>
 
-    sahtrace = {
-        type = "syslog",
-        level = 200
-    };
+#include "tr157-softwaremodules_priv.h"
 
-    trace-zones = {
-        "softwaremodules" = 200
-    };
+static void softwaremodules_execenv_status(amxd_object_t* obj, bool enable) {
+    amxd_trans_t transaction;
+    const char* alias = NULL;
+    amxd_dm_t* dm = softwaremodules_get_dm();
+    amxd_trans_init(&transaction);
+    amxd_trans_set_attr(&transaction, amxd_tattr_change_ro, true);
 
-    NetModel = "softwaremodules_execenv";
-    softwaremodules_execenv = {
-        InstancePath = "softwaremodules.ExecEnv.",
-        Tags = "softwaremodules",
-        Prefix = ""
-    };
+    alias = amxc_var_constcast(cstring_t, amxd_object_get_param_value(obj, "Alias"));
+    amxd_trans_select_object(&transaction, obj);
+    if(enable) {
+        amxd_trans_set_value(cstring_t, &transaction, "Status", "Up");
+        SAH_TRACE_WARNING("softwaremodules Interface[%s] change Status(Up)", alias);
+    } else {
+        amxd_trans_set_value(cstring_t, &transaction, "Status", "Down");
+        SAH_TRACE_WARNING("softwaremodules Interface[%s] change Status(Down)", alias);
+    }
+    amxd_trans_apply(&transaction, dm);
+    amxd_trans_clean(&transaction);
 }
 
-import "${name}.so" as "${name}";
-import "mod-dmstats.so";
-import "mod-dmext.so";
-import "mod-netmodel.so" as "mod_nm";
-#include "mod_sahtrace.odl";
+void _softwaremodules_execenv_enabled(UNUSED const char* const sig_name,
+                                const amxc_var_t* const data,
+                                UNUSED void* const priv) {
+    SAH_TRACE_WARNING("softwaremodules _softwaremodules_execenv_enabled");
+    amxd_dm_t* dm = softwaremodules_get_dm();
+    amxd_object_t* obj = amxd_dm_signal_get_object(dm, data);
+    softwaremodules_execenv_status(obj, true);
+}
 
-include "${name}_definition.odl";
+void _softwaremodules_execenv_disabled(UNUSED const char* const sig_name,
+                                 const amxc_var_t* const data,
+                                 UNUSED void* const priv) {
+    SAH_TRACE_WARNING("softwaremodules _softwaremodules_execenv_disabled");
+    amxd_dm_t* dm = softwaremodules_get_dm();
+    amxd_object_t* obj = amxd_dm_signal_get_object(dm, data);
+    softwaremodules_execenv_status(obj, false);
+}
 
-%define {
-    entry-point mod_nm.mod_netmodel_main;
-    entry-point tr181-softwaremodules.tr181_softwaremodules_main;
+void _softwaremodules_execenv_added(UNUSED const char* const sig_name,
+                              const amxc_var_t* const data,
+                              UNUSED void* const priv) {
+    amxd_dm_t* dm = softwaremodules_get_dm();
+    amxd_object_t* obj = amxd_dm_signal_get_object(dm, data);
+    amxd_object_t* inst = amxd_object_get_instance(obj, NULL, GET_UINT32(data, "index"));
+    SAH_TRACE_WARNING("softwaremodules _softwaremodules_execenv_added");
+    softwaremodules_execenv_status(inst, amxd_object_get_value(bool, inst, "Enable", NULL));
 }

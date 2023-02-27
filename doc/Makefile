@@ -8,7 +8,7 @@ doc: xml html confluence
 
 xml:
 	mkdir -p $(DOC_DIR)/xml
-	amxo-cg -Gxml,$(DOC_DIR)/xml ../odl/tr181-logical.odl
+	amxo-cg -Gxml,$(DOC_DIR)/xml ../odl/tr157-logical.odl
 
 html: xml
 	mkdir -p $(DOC_DIR)/html

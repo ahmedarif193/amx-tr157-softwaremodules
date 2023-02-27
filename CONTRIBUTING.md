@@ -1,6 +1,6 @@
 # Introduction
 
-First off, thank you for considering contributing to tr181-logical and the [Ambiorix](https://gitlab.com/prpl-foundation/components/ambiorix) project. It's people like you that makes [Ambiorix](https://gitlab.com/prpl-foundation/components/ambiorix) such a great set of tools and libraries.
+First off, thank you for considering contributing to tr157-logical and the [Ambiorix](https://gitlab.com/prpl-foundation/components/ambiorix) project. It's people like you that makes [Ambiorix](https://gitlab.com/prpl-foundation/components/ambiorix) such a great set of tools and libraries.
 
 Following these guidelines helps to communicate that you respect the time of the developers managing and developing this open source project. In return, they should reciprocate that respect in addressing your issue, assessing changes, and helping you finalize your merge requests.
 
@@ -8,9 +8,9 @@ All members of our community are expected to follow our [Code of Conduct](https:
 
 # What can I contribute?
 
-tr181-logical is a part of the [Ambiorix](https://gitlab.com/prpl-foundation/components/ambiorix) project. All parts of [Ambiorix](https://gitlab.com/prpl-foundation/components/ambiorix) are open source projects and we love to receive contributions from our community — you!
+tr157-logical is a part of the [Ambiorix](https://gitlab.com/prpl-foundation/components/ambiorix) project. All parts of [Ambiorix](https://gitlab.com/prpl-foundation/components/ambiorix) are open source projects and we love to receive contributions from our community — you!
 
-There are many ways to contribute, from writing tutorials or blog posts, improving the documentation, submitting bug reports and feature requests or writing code which can be incorporated into tr181-logical or the [Ambiorix](https://gitlab.com/prpl-foundation/components/ambiorix) project itself.
+There are many ways to contribute, from writing tutorials or blog posts, improving the documentation, submitting bug reports and feature requests or writing code which can be incorporated into tr157-logical or the [Ambiorix](https://gitlab.com/prpl-foundation/components/ambiorix) project itself.
 
 For `support questions`, please create an issue with the label ```support```.
 
@@ -23,24 +23,24 @@ Unsure where to begin contributing to Ambiorix? You can start by looking through
 - documentation: Most of the documentation is written by non-native English speaking people, reviewing the documentation and fixing grammar mistakes, or just rewriting parts, can help to make it all more understandable.
 - help-wanted: Help wanted issues are very specific and someone is needed with a good knowledge of that specific area.
 
-# Contributions to tr181-logical
+# Contributions to tr157-logical
 
 ## Getting started
 
 Fork the main (called `upstream`) repository to a private repository. 
 
-After forking you have your own copy of the repository, available at `https://gitlab.com/<USER>/tr181-logical` where `<USER>` is your user name on GitLab.
+After forking you have your own copy of the repository, available at `https://gitlab.com/<USER>/tr157-logical` where `<USER>` is your user name on GitLab.
 
 Clone your fork on your computer (replace `<USER>` by your gitlab user name):
 
 ```bash
-git clone git@gitlab.com:<USER>/tr181-logical.git
+git clone git@gitlab.com:<USER>/tr157-logical.git
 ```
 
 Add `upstream` as a remote called `upstream`:
 
 ```bash
-git remote add upstream git@gitlab.com:prpl-foundation/components/core/plugins/tr181-logical.git
+git remote add upstream git@gitlab.com:prpl-foundation/components/core/plugins/tr157-logical.git
 ```
 
 ## For Each Contribution
@@ -106,4 +106,4 @@ When filing an issue, make sure to answer these five questions:
 
 Do you have great idea's for amazing features, first check the issue tracker to see if someone else already added such a feature request.
 
-If you find yourself wishing for a feature that doesn't exist in Ambiorix (in general) or tr181-logical (specific), you are probably not alone. Open an issue on our issues list on GitLab which describes the feature you would like to see, why you need it, and how it should work.
+If you find yourself wishing for a feature that doesn't exist in Ambiorix (in general) or tr157-logical (specific), you are probably not alone. Open an issue on our issues list on GitLab which describes the feature you would like to see, why you need it, and how it should work.

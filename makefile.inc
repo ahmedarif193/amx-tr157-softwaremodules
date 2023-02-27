@@ -28,7 +28,7 @@ CC_PARTS = $(subst -, ,$(CC))
 CC_NAME = $(word $(words $(CC_PARTS)),$(CC_PARTS))
 
 # Target
-COMPONENT = tr181-softwaremodules
+COMPONENT = tr157-softwaremodules
 
 # install directories
 PREFIX ?= /usr/
@@ -37,7 +37,7 @@ BINDIR ?= $(PREFIX)bin
 INCLUDEDIR ?= $(PREFIX)include
 INITDIR ?= /etc/init.d
 ACLDIR ?= /etc/acl
-DOCDIR ?= $(PREFIX)share/doc/tr181-softwaremodules
+DOCDIR ?= $(PREFIX)share/doc/tr157-softwaremodules
 PROCMONDIR ?= $(PREFIX)lib/processmonitor/scripts
 
 # default config options

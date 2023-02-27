@@ -1,7 +1,7 @@
 #!/bin/sh
 [ -f /etc/environment ] && source /etc/environment
 ulimit -c ${ULIMIT_CONFIGURATION:0}
-name="tr181-softwaremodules"
+name="tr157-softwaremodules"
 
 case $1 in
     start|boot)

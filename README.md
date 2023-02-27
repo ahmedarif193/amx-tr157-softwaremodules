@@ -1,3 +1,3 @@
-# tr181-softwaremodules
+# tr157-softwaremodules
 
-tr181 based softwaremodules manager
+tr157 based softwaremodules manager

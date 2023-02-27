@@ -1,6 +1,6 @@
 PKG_CONFIG_LIBDIR := /usr/lib/pkgconfig:/lib/pkgconfig:/usr/lib/x86_64-linux-gnu/pkgconfig:$(PKG_CONFIG_LIBDIR)
 MACHINE = $(shell $(CC) -dumpmachine)
-SUBDIRS := $(wildcard tr181-logical_*)
+SUBDIRS := $(wildcard tr157-logical_*)
 MODDIRS := $(wildcard common/mod-*)
 OBJDIR = ../output/$(MACHINE)/coverage
 COVERREPORT = report
