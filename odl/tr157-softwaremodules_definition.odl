@@ -72,6 +72,12 @@
     on event "dm:object-changed" call softwaremodules_execenv_disabled
         filter 'path matches "SoftwareModules.ExecEnv.[0-9]+\.$" && parameters.Enable.to == false';
 
+    on event "dm:object-changed" call softwaremodules_execenv_reset
+        filter 'path matches "SoftwareModules.ExecEnv.[0-9]+\.$" && parameters.Enable.to == false';
+
     on event "dm:instance-added" call softwaremodules_execenv_added
+        filter 'path == "SoftwareModules.ExecEnv."';
+
+    on event "dm:instance-removed" call softwaremodules_execenv_removed
         filter 'path == "SoftwareModules.ExecEnv."';
 }

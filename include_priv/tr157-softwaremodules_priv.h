@@ -93,6 +93,14 @@ void _softwaremodules_execenv_disabled(const char* const sig_name,
 void _softwaremodules_execenv_added(const char* const sig_name,
                               const amxc_var_t* const data,
                               void* const priv);
+
+void _softwaremodules_execenv_reset(const char* const sig_name,
+                              const amxc_var_t* const data,
+                              void* const priv);
+
+void _softwaremodules_execenv_removed(const char* const sig_name,
+                              const amxc_var_t* const data,
+                              void* const priv);
 #ifdef __cplusplus
 }
 #endif
