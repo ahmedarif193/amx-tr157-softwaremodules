@@ -17,8 +17,8 @@ STAGING_LIBDIR = $(if $(STAGINGDIR), -L$(STAGINGDIR)/lib) $(if $(STAGINGDIR), -L
 
 # files
 HEADERS = $(wildcard $(INCDIR_PUB)/$(TARGET_NAME)/*.h)
-SOURCES = $(wildcard $(SRCDIR)/*.c)
-OBJECTS = $(addprefix $(OBJDIR)/,$(notdir $(SOURCES:.c=.o)))
+SOURCES = $(wildcard $(SRCDIR)/*.cpp*)
+OBJECTS = $(addprefix $(OBJDIR)/,$(notdir $(SOURCES:.cpp=.o)))
 
 # compilation and linking flags
 CFLAGS += -Wall -Wextra -Werror \
@@ -27,11 +27,7 @@ CFLAGS += -Wall -Wextra -Werror \
           -fPIC -g3 $(addprefix -I ,$(INCDIRS)) \
           -DSAHTRACES_ENABLED -DSAHTRACES_LEVEL=500
 
-ifeq ($(CC_NAME),g++)
-	CFLAGS += -std=c++2a
-else
-	CFLAGS += -Wstrict-prototypes -Wold-style-definition -Wnested-externs -std=c11
-endif
+CFLAGS += -std=c++11
 
 LDFLAGS += $(STAGING_LIBDIR) -shared -fPIC
 LDFLAGS += -lamxb -lamxc -lamxd -lamxo -lamxp -lsahtrace
@@ -47,7 +43,7 @@ $(TARGET_A): $(OBJECTS)
 
 -include $(OBJECTS:.o=.d)
 
-$(OBJDIR)/%.o: $(SRCDIR)/%.c | $(OBJDIR)/
+$(OBJDIR)/%.o: $(SRCDIR)/%.cpp | $(OBJDIR)/
 	$(CC) $(CFLAGS) -c -o $@ $<
 	@$(CC) $(CFLAGS) -MM -MP -MT '$(@) $(@:.o=.d)' -MF $(@:.o=.d) $(<)
 

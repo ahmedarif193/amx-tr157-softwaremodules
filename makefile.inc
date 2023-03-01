@@ -41,4 +41,4 @@ DOCDIR ?= $(PREFIX)share/doc/tr157-softwaremodules
 PROCMONDIR ?= $(PREFIX)lib/processmonitor/scripts
 
 # default config options
-CONFIG_SAH_AMX_TR181_SOFTWAREMODULES_ORDER ?= 21
+CONFIG_SAH_AMX_TR157_SOFTWAREMODULES_ORDER ?= 49

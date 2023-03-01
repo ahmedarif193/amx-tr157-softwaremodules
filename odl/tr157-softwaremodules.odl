@@ -78,11 +78,11 @@
 
     sahtrace = {
         type = "syslog",
-        level = 200
+        level = 500
     };
 
     trace-zones = {
-        "softwaremodules" = 200
+        "softwaremodules" = 500
     };
 
     NetModel = "softwaremodules_execenv";
